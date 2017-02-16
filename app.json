@@ -1,0 +1,8 @@
+{
+  "name": "Calendar Fulfillment API for api.ai",
+  "description": "Calendar Fulfillment API for api.ai",
+  "image": "heroku/python",
+  "repository": "",
+  "keywords": ["python", "Flask" ],
+  "addons": []
+}
