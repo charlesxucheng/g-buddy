@@ -1,0 +1,41 @@
+To try out, hit https://g-buddy-apiai-calendar.herokuapp.com/webhook with Postman or similar,
+
+Put POST command, "Content-Type: application/json" as Header, and the following as Request body:
+```
+{
+  "id": "b340a1f7-abee-4e13-9bdd-5e8938a48b7d",
+  "timestamp": "2017-02-09T15:38:26.548Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "What are on my calendar today?",
+    "action": "getCalendarEvents",
+    "actionIncomplete": false,
+    "parameters": {
+    	"date": "2017-02-16"
+    },
+    "contexts": []
+  },
+  "sessionId": "4b6a6779-b8ea-4094-b2ed-a302ba201815"
+}
+```
+
+Or use the following Curl command
+```
+curl -X POST -H "Content-Type: application/json" -H "Cache-Control: no-cache" -H "Postman-Token: 68f92cbb-6f49-06c0-8c5f-5fcc9efd0f8c" -d '{
+  "id": "b340a1f7-abee-4e13-9bdd-5e8938a48b7d",
+  "timestamp": "2017-02-09T15:38:26.548Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "What are on my calendar today?",
+    "action": "getCalendarEvents",
+    "actionIncomplete": false,
+    "parameters": {
+    	"date": "2017-02-16"
+    },
+    "contexts": []
+  },
+  "sessionId": "4b6a6779-b8ea-4094-b2ed-a302ba201815"
+}' "https://g-buddy-apiai-calendar.herokuapp.com/webhook"
+```
