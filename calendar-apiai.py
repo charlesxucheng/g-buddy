@@ -43,7 +43,7 @@ def processRequest(req):
 
 # TODO: Connect to Google API
 def getCalendarEvents():
-    speech = "You have the following appointments today. Risk Assessment Meeting at 2pm. Meeting Chow Kiat at 630pm."
+    speech = "You have the following appointments today. Risk Assessment Meeting at 2pm. Meeting CK at 630pm."
 
     print("Response:")
     print(speech)
@@ -53,7 +53,8 @@ def getCalendarEvents():
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [{"name":"Risk Assessment Meeting"}, {"name":"Meeting Chow Kiat"}],
+        "contextOut": [{"name":"RiskAssessmentMeeting", "parameters": { "time":"2pm"}},
+        {"name":"MeetingCK", "parameters": {"time": "630pm"}}],
         "source": "g-buddy-apiai-calendar"
     }
 
