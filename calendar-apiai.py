@@ -67,7 +67,7 @@ def processRequest(req):
         return res
     elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
         startTime = req.get("result").get("parameters").get("time")
-        attendees = req.get("result").get("parameters").get("attendees")
+        attendees = req.get("result").get("parameters").get("names")
         venue = req.get("result").get("parameters").get("venue")
         res = rescheduleCalendarEvent(startTime, venue, attendees, None)
         return res
@@ -132,7 +132,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     if startTime is not None:
         result = [ event for event in eventsToday if event["startTime"] == startTime ]
         if len(result) >= 1:
-            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow"
+            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is changed to Meeting Room 2."
             rescheduledEvent = result[0]
         else:
             speech = "Sorry but I cannot find any events starting at " + startTime + " to reschedule"
@@ -140,7 +140,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     elif attendees is not None:
         result = [ e for e in eventsToday if e["attendees"] == attendees ]
         if len(result) >= 1:
-            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow"
+            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is changed to Meeting Room 3."
             rescheduledEvent = result[0]
         else:
             speech = "Sorry but I cannot find any events having attendees " + " ".join(attendees) + " to reschedule"
