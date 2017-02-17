@@ -20,7 +20,7 @@ event1 = {
     "date": "2017-02-18",
     "startTime": "14:00:00",
     "endTime": "15:00:00",
-    "attendees": ["Alice", "Bob", "Charlie"],
+    "attendees": ["Alice", "Bob"],
     "venue": "Meeting Room 123"
 }
 event2 = {
@@ -115,7 +115,7 @@ def getCalendarEvents():
     for e in eventsToday:
 
 
-        eventsResponse = eventsResponse + e["subject"] + " at " + timeToStr(e["startTime"]) + " to " + timeToStr(e["endTime"]) + " at " + e["venue"] + " with " + " ".join(e["attendees"]) + ". "
+        eventsResponse = eventsResponse + e["subject"] + " at " + timeToStr(e["startTime"]) + " to " + timeToStr(e["endTime"]) + " at " + e["venue"] + " with " + " and ".join(e["attendees"]) + ". "
     speech = "You have the following appointments today. " + eventsResponse
 
     print("Response:")
@@ -160,7 +160,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
             speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 3pm tomorrow. Venue is unchanged."
             rescheduledEvent = result[0]
         else:
-            speech = "Sorry but I cannot find any events having attendees " + " ".join(attendees) + " to reschedule"
+            speech = "Sorry but I cannot find any events having attendees " + " and ".join(attendees) + " to reschedule"
             rescheduledEvent = None
     else:
         speech = "Sorry. Reschedule by subject or venue has not yet been implemented."
@@ -227,7 +227,7 @@ def getExperts(domain):
     }
 
 def scheduleMeeting(date, time, duration, names):
-    speech = "Ok, booked meeting with " + " ".join(names) + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
+    speech = "Ok, booked meeting with " + " and ".join(names) + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
 
     print("Response:")
     print(speech)
@@ -241,7 +241,7 @@ def scheduleMeeting(date, time, duration, names):
     }
 
 def scheduleMeetingAuto(names, duration):
-    speech = "Ok, booked meeting with " + " ".join(names) + " tomorrow at 11AM for " + duration + ". Venue is Meeting Room 9."
+    speech = "Ok, booked meeting with " + " and ".join(names) + " tomorrow at 11AM for " + duration + ". Venue is Meeting Room 9."
 
     print("Response:")
     print(speech)
