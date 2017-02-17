@@ -53,7 +53,7 @@ def processRequest(req):
         return res
     elif req.get("result").get("action") == "scheduleMeeting":
         contexts = req.get("result").get("contexts")
-        namesParameter = next((x for x in contexts if x.name == "staffname"), None)
+        namesParameter = next((x for x in contexts if x.get("name") == "staffname"), None)
         names = namesParameter.get("parameters").get("names")
         res = scheduleMeeting(names)
         return res
