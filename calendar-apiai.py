@@ -14,6 +14,33 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
+event1 = {
+    "subject": "Risk Assessment Meeting",
+    "date": "2017-02-18",
+    "startTime": "2pm",
+    "endTime": "3pm",
+    "attendants": ["Alice", "Bob", "Charlie"],
+    "venue": "Meeting Room 123"
+}
+event2 = {
+    "subject": "Meeting Boss",
+    "date": "2017-02-18",
+    "startTime": "6:30pm",
+    "endTime": "7:30pm",
+    "attendants": ["Boss"],
+    "venue": "Boss's Office"
+}
+event3 = {
+    "subject": "Meeting with JPM",
+    "date": "2017-02-19",
+    "startTime": "9AM",
+    "endTime": "10AM",
+    "attendants": ["Denny", "Emily"],
+    "venue": "Meeting Room 321"
+}
+
+events = [event1, event2, event3]
+eventsToday = [event1, event2]
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -39,7 +66,8 @@ def processRequest(req):
         res = deleteCalendarEvent()
         return res
     elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
-        res = rescheduleCalendarEvent("MeetingCK")
+        startTime = req.get("result").get("parameters").get("time")
+        res = rescheduleCalendarEvent(startTime, None, None, None)
         return res
     elif req.get("result").get("action") == "getDailyNews":
         res = getDailyNewsSummary()
@@ -64,18 +92,24 @@ def processRequest(req):
 
 # TODO: Connect to Google API
 def getCalendarEvents():
-    speech = "You have the following appointments today. Risk Assessment Meeting at 2pm. Meeting CK at 630pm."
+    print("Getting calendar events")
+
+    eventsResponse = ""
+    for e in eventsToday:
+        eventsResponse = eventsResponse + e["subject"] + " at " + e["startTime"] + " to " + e["endTime"] + " at " + e["venue"] + " with " + " ".join(e["attendants"]) + ". "
+    speech = "You have the following appointments today. " + eventsResponse
 
     print("Response:")
     print(speech)
+
+    # eventsJson = json.dumps([e.__dict__ for e in eventsToday])
+    # print(eventsJson)
 
     return {
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        # "contextOut": [],
-        "contextOut": [{"name":"RiskAssessmentMeeting", "parameters": { "time":"2pm"}},
-        {"name":"MeetingCK", "parameters": {"time": "630pm"}}],
+        "contextOut": [{"name":"events", "parameters": eventsToday }],
         "source": "g-buddy-apiai-calendar"
     }
 
@@ -91,15 +125,33 @@ def deleteCalendarEvent():
         "source": "g-buddy-apiai-calendar"
     }
 
-def rescheduleCalendarEvent(event):
-    print("Rescheduling")
-    speech = "Calendar event " + event + " reschedule to 11am tomorrow"
+def rescheduleCalendarEvent(startTime, venue, attendents, subject):
+    print("Rescheduling event")
+    if startTime is not None:
+        result = [ event for event in eventsToday if event["startTime"] == startTime ]
+        if len(result) >= 1:
+            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow"
+            rescheduledEvent = result[0]
+        else:
+            speech = "Sorry but I cannot find any events starting at " + time + " to reschedule"
+            rescheduledEvent = None
+    elif attendents is not None:
+        result = [ e for e in eventsToday if e["attendents"] == attendents ]
+        if len(result) >= 1:
+            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow"
+            rescheduledEvent = result[0]
+        else:
+            speech = "Sorry but I cannot find any events having attendents " + " ".join(attendents) + " to reschedule"
+            rescheduledEvent = None
+    else:
+        speech = "Sorry. Reschedule by subject or venue has not yet been implemented."
+        rescheduledEvent = None
 
     return {
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        # "contextOut": [],
+        "contextOut": [{"name":"event-rescheduled", "parameters": rescheduledEvent }],
         "source": "g-buddy-apiai-calendar"
     }
 
@@ -122,7 +174,7 @@ def getNewsDetails(summary):
     if summary == "Amazon blah blah":
         speech = "Amazon blah blah. Blah blah blah"
     elif summary == "new US taxation law passed":
-        speech = "US corp rate tax will be reduced by 10% while VAT is likely to increase."
+        speech = "US corp rate tax will be reduced by 10% while consumer tax is likely to increase."
     else:
         speech = "Sorry I can't get more details for " + summary
 
@@ -140,7 +192,7 @@ def getNewsDetails(summary):
 
 def getExperts(domain):
     if domain == "tax":
-        speech = "The experts on " + domain + " are Lennie and Allen"
+        speech = "The experts on " + domain + " are Lenny and Alan"
     else:
         speech = "Sorry I can't find any experts for " + domain
 
@@ -152,7 +204,7 @@ def getExperts(domain):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [{ "name":"staffname", "parameters": { "names": ["Lennie", "Allen"] }}],
+        "contextOut": [{ "name":"staffname", "parameters": { "names": ["Lenny", "Alan"] }}],
         "source": "g-buddy-apiai-news"
     }
 
