@@ -26,8 +26,8 @@ event1 = {
 event2 = {
     "subject": "Meeting Boss",
     "date": "2017-02-18",
-    "startTime": "18:30:00",
-    "endTime": "19:30:00",
+    "startTime": "19:00:00",
+    "endTime": "20:00:00",
     "attendees": ["Vincent Cheang Weng Seng"],
     "venue": "Boss's Office"
 }
@@ -100,12 +100,15 @@ def processRequest(req):
         duration = namesParameter.get("parameters").get("duration.original")
         res = scheduleMeetingAuto(names, duration)
         return res
+    elif req.get("result").get("action") == "getTaxExposure":
+        source = req.get("originalRequest").get("source")
+        getTaxExposure(source)
     else:
         return {}
 
 def timeToStr(timeValue):
     date_obj = dt.strptime(timeValue, '%H:%M:%S')
-    return dt.strftime(date_obj, '%H:%M')
+    return dt.strftime(date_obj, '%I %p')
 
 # TODO: Connect to Google API
 def getCalendarEvents():
@@ -142,6 +145,20 @@ def deleteCalendarEvent():
         # "data": data,
         # "contextOut": [],
         "source": "g-buddy-apiai-calendar"
+    }
+
+def getTaxExposure(source):
+    if source == "google":
+        speech = "I know you are currently using a voice channel for this conversation. It will be easier to read the numbers on Slack."
+    else:
+        speech = "Equities: US$1,688,888 \nOptions: US$3,333,888"
+
+    return {
+     "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "g-buddy-apiai-tax-exposure"
     }
 
 def rescheduleCalendarEvent(startTime, venue, attendees, subject):
