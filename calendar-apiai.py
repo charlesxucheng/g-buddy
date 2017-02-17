@@ -151,7 +151,7 @@ def getTaxExposure(source):
     if source == "google":
         speech = "I know you are currently using a voice channel for this conversation. It will be easier to read the numbers on Slack."
     else:
-        speech = "Equities: US$1,688,888 \nOptions: US$3,333,888"
+        speech = "Equities: US$1,688,888    Options: US$3,333,888"
 
     return {
      "speech": speech,
