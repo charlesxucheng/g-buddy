@@ -52,7 +52,7 @@ def processRequest(req):
         res = getExperts(domain)
         return res
     elif req.get("result").get("action") == "scheduleMeeting":
-        names = req.get("result").get("contexts")[0].get("parameters").get("names")
+        names = req.get("result").get("contexts")[1].get("parameters").get("names")
         res = scheduleMeeting(names)
         return res
     else:
