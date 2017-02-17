@@ -6,6 +6,7 @@ standard_library.install_aliases()
 import urllib.request, urllib.parse, urllib.error
 import json
 import os
+from datetime import datetime as dt
 
 from flask import Flask
 from flask import request
@@ -66,10 +67,10 @@ def processRequest(req):
         res = deleteCalendarEvent()
         return res
     elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
+        res = rescheduleCalendarEvent(startTime, venue, attendees, None)
         startTime = req.get("result").get("parameters").get("time")
         attendees = req.get("result").get("parameters").get("names")
         venue = req.get("result").get("parameters").get("venue")
-        res = rescheduleCalendarEvent(startTime, venue, attendees, None)
         return res
     elif req.get("result").get("action") == "getDailyNews":
         res = getDailyNewsSummary()
@@ -84,13 +85,21 @@ def processRequest(req):
         res = getExperts(domain)
         return res
     elif req.get("result").get("action") == "scheduleMeeting":
-        contexts = req.get("result").get("contexts")
-        namesParameter = next((x for x in contexts if x.get("name") == "staffname"), None)
-        names = namesParameter.get("parameters").get("names")
-        res = scheduleMeeting(names)
+        # contexts = req.get("result").get("contexts")
+        # namesParameter = next((x for x in contexts if x.get("name") == "staffname"), None)
+        date = req.get("result").get("parameters").get("date")
+        startTime = req.get("result").get("parameters").get("time")
+        duration = req.get("result").get("parameters").get("duration")
+        names = req.get("result").get("parameters").get("names")
+        confirmation = req.get("result").get("parameters").get("confirmation")
+        res = scheduleMeeting(date, startTime, duration, names, confirmation)
         return res
     else:
         return {}
+
+def timeToStr(timeValue):
+    date_obj = dt.strptime(timeValue, '%H:%M:%S')
+    return dt.strftime(date_obj, '%I:%M %p')
 
 # TODO: Connect to Google API
 def getCalendarEvents():
@@ -98,7 +107,9 @@ def getCalendarEvents():
 
     eventsResponse = ""
     for e in eventsToday:
-        eventsResponse = eventsResponse + e["subject"] + " at " + e["startTime"] + " to " + e["endTime"] + " at " + e["venue"] + " with " + " ".join(e["attendees"]) + ". "
+
+
+        eventsResponse = eventsResponse + e["subject"] + " at " + timeToStr(e["startTime"]) + " to " + timeToStr(e["endTime"]) + " at " + e["venue"] + " with " + " ".join(e["attendees"]) + ". "
     speech = "You have the following appointments today. " + eventsResponse
 
     print("Response:")
@@ -158,7 +169,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     }
 
 def getDailyNewsSummary():
-    speech = "There are two high impact news today. First, for developed markets, new US taxation law passed. For emerging markets, Brazil is finally out of recession. "
+    speech = "There are two high impact news today. First, for developed markets, new US taxation law passed. Second, for emerging markets, Brazil is finally out of recession. "
 
     print("Response:")
     print(speech)
@@ -209,12 +220,15 @@ def getExperts(domain):
         "source": "g-buddy-apiai-news"
     }
 
-def scheduleMeeting(names):
-    fullList = ""
-    for name in names:
-        fullList = name + " "
+def scheduleMeeting(date, time, duration, names, confirmation):
+    if len(names) > 1:
+        if confirmation == True:
+            speech = "Ok, booked meeting with " + names[0] + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
+        else:
+            speech = names[1] + " is on leave today and tomorrow. " + names[0] + " is available. Would you like to proceed?"
+    else:
+        speech = "Ok, booked meeting with " + names[0] + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
 
-    speech = "Meeting scheduled for " + fullList + "tomorrw at 3pm to 4pm at 48M1"
     print("Response:")
     print(speech)
 
@@ -222,9 +236,8 @@ def scheduleMeeting(names):
     "speech": speech,
         "displayText": speech,
         # "data": data,
-        # "contextOut": [],
-        "contextOut": [{ "name":"meeting", "parameters": { "invited": ["Lennie", "Allen"], "date": "2017-02-18", "startTime": "3pm", "endTime": "4pm", "venue":"48M1" }}],
-        "source": "g-buddy-apiai-news"
+        "contextOut": [{ "name":"schedule-in-progress", "parameters": {}}],
+        "source": "g-buddy-apiai-calendar"
     }
 
 if __name__ == '__main__':
