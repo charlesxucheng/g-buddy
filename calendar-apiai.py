@@ -153,7 +153,9 @@ def getTaxExposure(source):
     else:
         speech = """Equities: US$1,688,888
                     Options: US$3,333,888"""
-
+    print("Response:")
+    print(speech)
+    
     return {
      "speech": speech,
         "displayText": speech,
