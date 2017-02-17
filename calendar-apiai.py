@@ -27,7 +27,7 @@ event2 = {
     "date": "2017-02-18",
     "startTime": "18:30:00",
     "endTime": "19:30:00",
-    "attendees": ["Vincent"],
+    "attendees": ["Vincent Cheang Weng Seng"],
     "venue": "Boss's Office"
 }
 event3 = {
@@ -129,7 +129,7 @@ def deleteCalendarEvent():
 
 def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     print("Rescheduling event")
-    if startTime is not None:
+    if startTime = "":
         result = [ event for event in eventsToday if event["startTime"] == startTime ]
         if len(result) >= 1:
             speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is changed to Meeting Room 2."
@@ -137,10 +137,10 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
         else:
             speech = "Sorry but I cannot find any events starting at " + startTime + " to reschedule"
             rescheduledEvent = None
-    elif attendees is not None:
+    elif attendees is not None and len(attendees) > 0:
         result = [ e for e in eventsToday if e["attendees"] == attendees ]
         if len(result) >= 1:
-            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is changed to Meeting Room 3."
+            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is unchanged."
             rescheduledEvent = result[0]
         else:
             speech = "Sorry but I cannot find any events having attendees " + " ".join(attendees) + " to reschedule"
