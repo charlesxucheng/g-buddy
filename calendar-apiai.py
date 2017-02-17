@@ -129,7 +129,7 @@ def deleteCalendarEvent():
 
 def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     print("Rescheduling event")
-    if startTime = "":
+    if startTime == "":
         result = [ event for event in eventsToday if event["startTime"] == startTime ]
         if len(result) >= 1:
             speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is changed to Meeting Room 2."
