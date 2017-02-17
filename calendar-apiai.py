@@ -184,9 +184,9 @@ def getDailyNewsSummary():
 
 def getNewsDetails(summary):
     if summary == "Brazil":
-        speech = "After 2 years, Brazil is finally out of recession. GDP grew by 1.4%. Manufacturing sector leads the recovery by a 5% gain. For details, please click on the link in your Google Now."
+        speech = "After 2 years, Brazil is finally out of recession. GDP grew by 1.4%. Manufacturing sector leads the recovery by a 5% gain. "
     elif summary == "new US taxation law passed":
-        speech = "A new taxation law is passed by the US Senate. US corp rate tax will be reduced by up to 10% in the coming years, while consumer tax is likely to increase. For details, please click on the link in your Google Now."
+        speech = "A new taxation law was passed by the US Senate earlier today. US corp rate tax will be reduced by up to 10% in the coming years, while consumer tax is likely to increase. "
     else:
         speech = "Sorry I can't get more details for " + summary
 
