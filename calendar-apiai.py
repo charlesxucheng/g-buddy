@@ -91,8 +91,14 @@ def processRequest(req):
         startTime = req.get("result").get("parameters").get("time")
         duration = req.get("result").get("parameters").get("duration")
         names = req.get("result").get("parameters").get("names")
-        confirmation = req.get("result").get("parameters").get("confirmation")
-        res = scheduleMeeting(date, startTime, duration, names, confirmation)
+        res = scheduleMeeting(date, startTime, duration, names)
+        return res
+    elif req.get("result").get("action") == "scheduleMeetingAuto":
+        contexts = req.get("result").get("contexts")
+        namesParameter = next((x for x in contexts if x.get("name") == "staffname"), None)
+        names = namesParameter.get("parameters").get("names")
+        duration = req.get("result").get("parameters").get("duration")
+        res = scheduleMeetingAuto(names, duration)
         return res
     else:
         return {}
@@ -220,14 +226,8 @@ def getExperts(domain):
         "source": "g-buddy-apiai-news"
     }
 
-def scheduleMeeting(date, time, duration, names, confirmation):
-    if len(names) > 1:
-        if confirmation == True:
-            speech = "Ok, booked meeting with " + names[0] + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
-        else:
-            speech = names[1] + " is on leave today and tomorrow. " + names[0] + " is available. Would you like to proceed?"
-    else:
-        speech = "Ok, booked meeting with " + names[0] + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
+def scheduleMeeting(date, time, duration, names):
+    speech = "Ok, booked meeting with " + " ".join(names) + " tomorrow at " + time + " for " + duration + ". Venue is Meeting Room 2."
 
     print("Response:")
     print(speech)
@@ -236,7 +236,20 @@ def scheduleMeeting(date, time, duration, names, confirmation):
     "speech": speech,
         "displayText": speech,
         # "data": data,
-        "contextOut": [{ "name":"schedule-in-progress", "parameters": {}}],
+        "contextOut": [],
+        "source": "g-buddy-apiai-calendar"
+    }
+
+def scheduleMeetingAuto(names, duration):
+    speech = "Ok, booked meeting with " + " ".join(names) + " tomorrow at 11AM for " + duration + ". Venue is Meeting Room 9."
+
+    print("Response:")
+    print(speech)
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        "contextOut": [],
         "source": "g-buddy-apiai-calendar"
     }
 
