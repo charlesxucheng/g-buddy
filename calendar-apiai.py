@@ -38,6 +38,9 @@ def processRequest(req):
     elif req.get("result").get("action") == "deleteCalendarEvent":
         res = deleteCalendarEvent()
         return res
+    elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
+        res = rescheduleCalendarEvent("MeetingCK")
+        return res
     else:
         return {}
 
@@ -61,6 +64,18 @@ def getCalendarEvents():
 # TODO: Connect to Google API
 def deleteCalendarEvent():
     speech = "Calendar Event Deleted"
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "g-buddy-apiai-calendar"
+    }
+
+def rescheduleCalendarEvent(event):
+    print("Rescheduling")
+    speech = "Calendar event " + event + " reschedule to 11am tomorrow"
 
     return {
         "speech": speech,
