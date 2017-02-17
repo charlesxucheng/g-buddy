@@ -159,8 +159,8 @@ def getTaxExposure(source):
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        # "contextOut": [],
-        "source": "g-buddy-apiai-tax-exposure"
+        "contextOut": [],
+        "source": "g-buddy-apiai-tax"
     }
 
 def rescheduleCalendarEvent(startTime, venue, attendees, subject):
