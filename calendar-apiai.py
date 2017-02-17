@@ -117,7 +117,7 @@ def getNewsDetails(summary):
 		speech = "US corp rate tax will be reduced by 10% while VAT is likely to increase."
 	else:
 		speech = "Sorry I can't get more details for " + summary
-	
+
 	print("Response:")
 	print(speech)
 
@@ -132,10 +132,10 @@ def getNewsDetails(summary):
 
 def getExpertss(domain):
 	if domain == "tax":
-		speech = "The experts on " + domain + "are Lenny and Allen"
+		speech = "The experts on " + domain + "are Lennie and Allen"
 	else:
 		speech = "Sorry I can't find any experts for " + domain
-	
+
 	print("Response:")
 	print(speech)
 
@@ -144,11 +144,11 @@ def getExpertss(domain):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [{ "name":"staffname", "parameters": {"names": ["Lenney", "Allen"]}}],
+        "contextOut": [{ "name":"staffname", "parameters": {"names": ["Lennie", "Allen"]}}],
         "source": "g-buddy-apiai-news"
 	}
 
-	
+
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
 
