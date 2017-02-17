@@ -97,8 +97,8 @@ def processRequest(req):
         contexts = req.get("result").get("contexts")
         namesParameter = next((x for x in contexts if x.get("name") == "staffname"), None)
         names = namesParameter.get("parameters").get("names")
-        duration = namesParameter.get("duration.original")
-        res = scheduleMeetingAuto(names, duration)
+        duration = namesParameter.get("parameters").get("duration.original")
+        res = scheduleMeetingAuto(nameget("parameters").s, duration)
         return res
     else:
         return {}
