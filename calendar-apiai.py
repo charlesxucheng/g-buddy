@@ -16,12 +16,12 @@ from flask import make_response
 app = Flask(__name__)
 
 event1 = {
-    "subject": "Risk Assessment Meeting",
+    "subject": "Data Analytics Project Meeting",
     "date": "2017-02-18",
     "startTime": "14:00:00",
     "endTime": "15:00:00",
-    "attendees": ["Alice", "Bob"],
-    "venue": "Meeting Room 123"
+    "attendees": ["Michael", "Heather"],
+    "venue": "Meeting Room 5"
 }
 event2 = {
     "subject": "Meeting Boss",
