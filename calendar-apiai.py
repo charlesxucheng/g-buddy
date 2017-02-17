@@ -52,7 +52,7 @@ def processRequest(req):
         res = getExperts(domain)
         return res
     elif req.get("result").get("action") == "scheduleMeeting":
-        names = req.get("result").get("contexts")[0].get("parameters")
+        names = req.get("result").get("contexts")[0].get("parameters").get("names")
         res = scheduleMeeting(names)
         return res
     else:
@@ -148,7 +148,7 @@ def getExperts(domain):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [{ "name":"staffname", "parameters": ["Lennie", "Allen"]}],
+        "contextOut": [{ "name":"staffname", "parameters": { "names": ["Lennie", "Allen"] }}],
         "source": "g-buddy-apiai-news"
     }
 
