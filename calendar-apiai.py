@@ -67,10 +67,10 @@ def processRequest(req):
         res = deleteCalendarEvent()
         return res
     elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
-        res = rescheduleCalendarEvent(startTime, venue, attendees, None)
         startTime = req.get("result").get("parameters").get("time")
         attendees = req.get("result").get("parameters").get("names")
         venue = req.get("result").get("parameters").get("venue")
+        res = rescheduleCalendarEvent(startTime, venue, attendees, None)
         return res
     elif req.get("result").get("action") == "getDailyNews":
         res = getDailyNewsSummary()
