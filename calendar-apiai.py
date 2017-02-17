@@ -19,7 +19,7 @@ event1 = {
     "date": "2017-02-18",
     "startTime": "14:00:00",
     "endTime": "15:00:00",
-    "attendants": ["Alice", "Bob", "Charlie"],
+    "attendees": ["Alice", "Bob", "Charlie"],
     "venue": "Meeting Room 123"
 }
 event2 = {
@@ -27,7 +27,7 @@ event2 = {
     "date": "2017-02-18",
     "startTime": "18:30:00",
     "endTime": "19:30:00",
-    "attendants": ["Boss"],
+    "attendees": ["Vincent"],
     "venue": "Boss's Office"
 }
 event3 = {
@@ -35,7 +35,7 @@ event3 = {
     "date": "2017-02-19",
     "startTime": "09:00:00",
     "endTime": "10:00:00",
-    "attendants": ["Denny", "Emily"],
+    "attendees": ["Denny", "Emily"],
     "venue": "Meeting Room 321"
 }
 
@@ -67,7 +67,9 @@ def processRequest(req):
         return res
     elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
         startTime = req.get("result").get("parameters").get("time")
-        res = rescheduleCalendarEvent(startTime, None, None, None)
+        attendees = req.get("result").get("parameters").get("attendees")
+        venue = req.get("result").get("parameters").get("venue")
+        res = rescheduleCalendarEvent(startTime, venue, attendees, None)
         return res
     elif req.get("result").get("action") == "getDailyNews":
         res = getDailyNewsSummary()
@@ -96,7 +98,7 @@ def getCalendarEvents():
 
     eventsResponse = ""
     for e in eventsToday:
-        eventsResponse = eventsResponse + e["subject"] + " at " + e["startTime"] + " to " + e["endTime"] + " at " + e["venue"] + " with " + " ".join(e["attendants"]) + ". "
+        eventsResponse = eventsResponse + e["subject"] + " at " + e["startTime"] + " to " + e["endTime"] + " at " + e["venue"] + " with " + " ".join(e["attendees"]) + ". "
     speech = "You have the following appointments today. " + eventsResponse
 
     print("Response:")
@@ -125,7 +127,7 @@ def deleteCalendarEvent():
         "source": "g-buddy-apiai-calendar"
     }
 
-def rescheduleCalendarEvent(startTime, venue, attendents, subject):
+def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     print("Rescheduling event")
     if startTime is not None:
         result = [ event for event in eventsToday if event["startTime"] == startTime ]
@@ -135,13 +137,13 @@ def rescheduleCalendarEvent(startTime, venue, attendents, subject):
         else:
             speech = "Sorry but I cannot find any events starting at " + startTime + " to reschedule"
             rescheduledEvent = None
-    elif attendents is not None:
-        result = [ e for e in eventsToday if e["attendents"] == attendents ]
+    elif attendees is not None:
+        result = [ e for e in eventsToday if e["attendees"] == attendees ]
         if len(result) >= 1:
             speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow"
             rescheduledEvent = result[0]
         else:
-            speech = "Sorry but I cannot find any events having attendents " + " ".join(attendents) + " to reschedule"
+            speech = "Sorry but I cannot find any events having attendees " + " ".join(attendees) + " to reschedule"
             rescheduledEvent = None
     else:
         speech = "Sorry. Reschedule by subject or venue has not yet been implemented."
