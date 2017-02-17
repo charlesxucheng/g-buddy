@@ -140,7 +140,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     elif attendees is not None and len(attendees) > 0:
         result = [ e for e in eventsToday if set(attendees) == set(e["attendees"]) ]
         if len(result) >= 1:
-            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is unchanged."
+            speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 3pm tomorrow. Venue is unchanged."
             rescheduledEvent = result[0]
         else:
             speech = "Sorry but I cannot find any events having attendees " + " ".join(attendees) + " to reschedule"
@@ -158,7 +158,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
     }
 
 def getDailyNewsSummary():
-    speech = "There are two high impact news today. For GIC, Amazon blah blah. For Asset Management, new US taxation law passed."
+    speech = "There are two high impact news today. First, for developed markets, new US taxation law passed. For emerging markets, Brazil is finally out of recession. "
 
     print("Response:")
     print(speech)
@@ -167,16 +167,15 @@ def getDailyNewsSummary():
         "speech": speech,
         "displayText": speech,
         # "data": data,
-        # "contextOut": [],
-        "contextOut": [{"name":"newssummary", "parameters": { "GIC": "Amazon blah blah", "Asset Management": "new US taxation law passed" }}],
+        # "contextOut": [{"name":"newssummary", "parameters": {}}],
         "source": "g-buddy-apiai-calendar"
     }
 
 def getNewsDetails(summary):
-    if summary == "Amazon blah blah":
-        speech = "Amazon blah blah. Blah blah blah"
+    if summary == "Brazil":
+        speech = "After 2 years, Brazil is finally out of recession. GDP grew by 1.4%. Manufacturing sector leads the recovery by a 5% gain. For details, please click on the link in your Google Now."
     elif summary == "new US taxation law passed":
-        speech = "US corp rate tax will be reduced by 10% while consumer tax is likely to increase."
+        speech = "A new taxation law is passed by the US Senate. US corp rate tax will be reduced by up to 10% in the coming years, while consumer tax is likely to increase. For details, please click on the link in your Google Now."
     else:
         speech = "Sorry I can't get more details for " + summary
 
