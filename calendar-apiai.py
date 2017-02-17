@@ -130,7 +130,7 @@ def getNewsDetails(summary):
         "source": "g-buddy-apiai-news"
 	}
 
-def getExpertss(domain):
+def getExperts(domain):
 	if domain == "tax":
 		speech = "The experts on " + domain + "are Lennie and Allen"
 	else:
