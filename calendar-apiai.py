@@ -99,7 +99,7 @@ def processRequest(req):
 
 def timeToStr(timeValue):
     date_obj = dt.strptime(timeValue, '%H:%M:%S')
-    return dt.strftime(date_obj, '%I:%M %p')
+    return dt.strftime(date_obj, '%H:%M %p')
 
 # TODO: Connect to Google API
 def getCalendarEvents():
