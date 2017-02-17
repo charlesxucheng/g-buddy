@@ -48,7 +48,7 @@ def processRequest(req):
         res = getNewsDetails("new US taxation law passed")
         return res
     elif req.get("result").get("action") == "getExperts":
-        domain = req.get("result").get("context")[0].get("name")
+        domain = req.get("result").get("contexts")[0].get("name")
         res = getExperts(domain)
         return res
     else:
