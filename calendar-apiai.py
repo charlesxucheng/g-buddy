@@ -102,7 +102,7 @@ def getDailyNewsSummary():
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [{"name":"NewsSummary", "parameters": { "GIC": "Amazon blah blah", "Asset Management": "new US taxation law passed" }}],
+        "contextOut": [{"name":"newssummary", "parameters": { "GIC": "Amazon blah blah", "Asset Management": "new US taxation law passed" }}],
         "source": "g-buddy-apiai-calendar"
     }
 
@@ -112,7 +112,7 @@ def getNewsDetails(summary):
 	elif summary == "new US taxation law passed":
 		speech = "US corp rate tax will be reduced by 10% while VAT is likely to increase."
 	else:
-		speech = ""
+		speech = "Sorry I can't get more details for " + summary
 	
 	print("Response:")
 	print(speech)
@@ -122,7 +122,7 @@ def getNewsDetails(summary):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [],
+        "contextOut": [{ "name":"tax" }],
         "source": "g-buddy-apiai-news"
 	}
 
