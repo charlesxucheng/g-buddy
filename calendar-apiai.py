@@ -41,6 +41,12 @@ def processRequest(req):
     elif (req.get("result").get("action") == "rescheduleCalendarEvent" or req.get("result").get("action") == "rescheduleMeetingCK"):
         res = rescheduleCalendarEvent("MeetingCK")
         return res
+    elif req.get("result").get("action") == "getDailyNews":
+        res = getDailyNewsSummary()
+        return res
+    elif req.get("result").get("action") == "getNewsDetails":
+        res = getNewsDetails()
+        return res
     else:
         return {}
 
@@ -85,43 +91,8 @@ def rescheduleCalendarEvent(event):
         "source": "g-buddy-apiai-calendar"
     }
 
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
-        return None
-
-    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
-
-
-def makeWebhookResult(data):
-    query = data.get('query')
-    if query is None:
-        return {}
-
-    result = query.get('results')
-    if result is None:
-        return {}
-
-    channel = result.get('channel')
-    if channel is None:
-        return {}
-
-    item = channel.get('item')
-    location = channel.get('location')
-    units = channel.get('units')
-    if (location is None) or (item is None) or (units is None):
-        return {}
-
-    condition = item.get('condition')
-    if condition is None:
-        return {}
-
-    # print(json.dumps(item, indent=4))
-
-    speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
-             ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
+def getDailyNewsSummary():
+    speech = "There are two high impact news today. For GIC, Amazon blah blah. For Asset Management, new US taxation law passed."
 
     print("Response:")
     print(speech)
@@ -131,8 +102,29 @@ def makeWebhookResult(data):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
+        "contextOut": [{"name":"NewsSummary", "parameters": { "GIC": "Amazon blah blah", "Asset Management": "new US taxation law passed" }}],
+        "source": "g-buddy-apiai-calendar"
     }
+
+def getNewsDetails(summary):
+	if summary == "Amazon blah blah":
+		speech = "Amazon blah blah. Blah blah blah"
+	elif summary == "new US taxation law passed":
+		speech = "US corp rate tax will be reduced by 10% while VAT is likely to increase."
+	else:
+		speech = ""
+	
+	print("Response:")
+	print(speech)
+
+	return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "contextOut": [],
+        "source": "g-buddy-apiai-news"
+	}
 
 
 if __name__ == '__main__':
