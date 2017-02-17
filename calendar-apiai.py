@@ -102,7 +102,8 @@ def processRequest(req):
         return res
     elif req.get("result").get("action") == "getTaxExposure":
         source = req.get("originalRequest").get("source")
-        getTaxExposure(source)
+        res = getTaxExposure(source)
+        return res
     else:
         return {}
 
