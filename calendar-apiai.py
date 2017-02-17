@@ -47,6 +47,10 @@ def processRequest(req):
     elif req.get("result").get("action") == "getNewsDetails":
         res = getNewsDetails("new US taxation law passed")
         return res
+    elif req.get("result").get("action") == "getExperts":
+        domain = req.get("result").get("context")[0].get("name")
+        res = getExperts(domain)
+        return res
     else:
         return {}
 
@@ -126,7 +130,25 @@ def getNewsDetails(summary):
         "source": "g-buddy-apiai-news"
 	}
 
+def getExpertss(domain):
+	if domain == "tax":
+		speech = "The experts on " + domain + "are Lenny and Allen"
+	else:
+		speech = "Sorry I can't find any experts for " + domain
+	
+	print("Response:")
+	print(speech)
 
+	return {
+        "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "contextOut": [{ "name":"staffname", "parameters": {"names": ["Lenney", "Allen"]}}],
+        "source": "g-buddy-apiai-news"
+	}
+
+	
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
 
