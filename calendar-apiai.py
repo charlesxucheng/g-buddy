@@ -138,7 +138,7 @@ def rescheduleCalendarEvent(startTime, venue, attendees, subject):
             speech = "Sorry but I cannot find any events starting at " + startTime + " to reschedule"
             rescheduledEvent = None
     elif attendees is not None and len(attendees) > 0:
-        result = [ e for e in eventsToday if e["attendees"] == attendees ]
+        result = [ e for e in eventsToday if attendees in e["attendees"] ]
         if len(result) >= 1:
             speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow. Venue is unchanged."
             rescheduledEvent = result[0]
