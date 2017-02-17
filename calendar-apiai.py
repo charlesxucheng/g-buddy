@@ -17,24 +17,24 @@ app = Flask(__name__)
 event1 = {
     "subject": "Risk Assessment Meeting",
     "date": "2017-02-18",
-    "startTime": "2pm",
-    "endTime": "3pm",
+    "startTime": "14:00:00",
+    "endTime": "15:00:00",
     "attendants": ["Alice", "Bob", "Charlie"],
     "venue": "Meeting Room 123"
 }
 event2 = {
     "subject": "Meeting Boss",
     "date": "2017-02-18",
-    "startTime": "6:30pm",
-    "endTime": "7:30pm",
+    "startTime": "18:30:00",
+    "endTime": "19:30:00",
     "attendants": ["Boss"],
     "venue": "Boss's Office"
 }
 event3 = {
     "subject": "Meeting with JPM",
     "date": "2017-02-19",
-    "startTime": "9AM",
-    "endTime": "10AM",
+    "startTime": "09:00:00",
+    "endTime": "10:00:00",
     "attendants": ["Denny", "Emily"],
     "venue": "Meeting Room 321"
 }
@@ -133,7 +133,7 @@ def rescheduleCalendarEvent(startTime, venue, attendents, subject):
             speech = "Calendar event " + result[0]["subject"] + " has been rescheduled to 11am tomorrow"
             rescheduledEvent = result[0]
         else:
-            speech = "Sorry but I cannot find any events starting at " + time + " to reschedule"
+            speech = "Sorry but I cannot find any events starting at " + startTime + " to reschedule"
             rescheduledEvent = None
     elif attendents is not None:
         result = [ e for e in eventsToday if e["attendents"] == attendents ]
