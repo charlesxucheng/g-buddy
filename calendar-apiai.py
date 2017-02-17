@@ -45,7 +45,7 @@ def processRequest(req):
         res = getDailyNewsSummary()
         return res
     elif req.get("result").get("action") == "getNewsDetails":
-        res = getNewsDetails()
+        res = getNewsDetails("new US taxation law passed")
         return res
     else:
         return {}
