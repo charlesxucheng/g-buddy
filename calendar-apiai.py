@@ -51,6 +51,10 @@ def processRequest(req):
         domain = req.get("result").get("contexts")[0].get("name")
         res = getExperts(domain)
         return res
+    elif req.get("result").get("action") == "scheduleMeeting":
+        names = req.get("result").get("contexts")[0].get("parameters")
+        res = scheduleMeeting(names)
+        return res
     else:
         return {}
 
@@ -132,7 +136,7 @@ def getNewsDetails(summary):
 
 def getExperts(domain):
 	if domain == "tax":
-		speech = "The experts on " + domain + "are Lennie and Allen"
+		speech = "The experts on " + domain + " are Lennie and Allen"
 	else:
 		speech = "Sorry I can't find any experts for " + domain
 
@@ -144,10 +148,27 @@ def getExperts(domain):
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "contextOut": [{ "name":"staffname", "parameters": {"names": ["Lennie", "Allen"]}}],
+        "contextOut": [{ "name":"staffname", "parameters": ["Lennie", "Allen"]}],
         "source": "g-buddy-apiai-news"
 	}
 
+def scheduleMeeting(names):
+    fullList = ""
+    for name in names:
+        fullList = name + " "
+
+    speech = "Meeting scheduled for " + fullList + "tomorrw at 3pm to 4pm at 48M1"
+	print("Response:")
+	print(speech)
+
+	return {
+    "speech": speech,
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "contextOut": [{ "name":"meeting", "parameters": { "invited": ["Lennie", "Allen"], "date": "2017-02-18", "startTime": "3pm", "endTime": "4pm", "venue":"48M1" }}],
+        "source": "g-buddy-apiai-news"
+	}
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
